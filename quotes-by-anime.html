@@ -451,7 +451,7 @@
   }
   setInterval(screenCheck, 1000)
   function screenCheck() {
-    if (screen.availHeight < screen.availWidth) {
+    if (window.innerHeight < window.innerWidth) {
 
       document.getElementById("turn").style.display = "initial";
       document.getElementsByClassName("topnav")[0].style.display = "none";
