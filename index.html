@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta name="" content="">
+  <title>aniQuote</title>
+  <link rel="icon" href=
+  "./ttlimg.png"
+  type="image/x-icon">
+  <style media="screen">
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@1,700&family=Poppins&family=Raleway:wght@200&display=swap');
+    * {
+      padding: 0px;
+      margin: 0px;
+      position: relative;
+      z-index: 0;
+      font-family: Open Sans;
+      font-family: Poppins;
+      text-align: center;
+      align-items: center;
+      color: white;
+      align-self: center;
+      box-sizing: border-box;
+      font-size: 2vh;
+      scrollbar-width: none;
+
+    }
+    *:focus {
+      outline: none;
+    }
+    #body {
+      text-align: center;
+      background-color: #222222;
+      z-index: 0;
+      width: 100%;
+      min-height: 100vh;
+
+    }
+
+    #loading {
+      transition-duration: 1s;
+      display: none;
+      position: absolute;
+      top: 3vh;
+      left: 7vw;
+      width: 86vw;
+      height: 86vh;
+      margin-top: 5vh;
+      border: solid 2vh #F0A500;
+      border-radius: 5vh;
+      z-index: 1;
+      background-color: #222222;
+    }
+    #turn {
+      transition-duration: 1s;
+      display: none;
+      position: absolute;
+      top: 3vh;
+      left: 7vw;
+      width: 86vw;
+      height: 86vh;
+      margin-top: 5vh;
+      border: solid 2vh #F0A500;
+      border-radius: 5vh;
+      z-index: 1;
+      background-color: #222222;
+    }
+    #loadCont {
+      width: 32vw;
+      margin: auto;
+      margin-top: 40vh;
+    }
+    #loadCont h1 {
+      /* vertical-align: middle;
+      position: absolute;
+      top: 50%; bottom: 50%;
+      left: auto; right: auto;*/
+
+      margin-bottom: auto;
+      text-align: left;
+      font-size: 8vw;
+    }
+    #line {
+      background-color: #F0A500;
+      width: 1vh;
+      height: 1vh;
+      border: none;
+      margin-top: -1vh;
+      margin-inline: 0.3vh;
+      animation: lineLoad;
+      animation-duration: 1.5s;
+      animation-delay: 0.07s;
+      animation-iteration-count: infinite;
+      border-radius: 0  0.5vh 0.5vh 0;
+    }
+    #container {
+      z-index: -1;
+      margin-bottom: 0;
+      height: inherit;
+    }
+    #container::-webkit-scrollbar {
+      display: none;
+    }
+    #container::scrollbar {
+      display: none;
+    }
+
+    #charDiv {
+      max-height: 30vh;
+      height: 50vw;
+      background-color: #F0A500;
+      padding-top: min(max(1vh, 18px), 4vh);
+      padding-bottom: min(max(1vh, 18px), 4vh);
+      overflow-y: hidden;
+    }
+    #charImgDiv {
+
+      width: min(max(28vh, 12px), 46vw);
+      height: min(max(42vw, 12px), 28vh);
+      margin-left: 5vw;
+
+      float: left;
+
+    }
+    #charImg {
+      height: 38vw;
+      width: 38vw;
+      max-height: 24vh;
+      max-width: 24vh;
+      box-sizing: initial;
+      border-radius: 50%;
+      border: min(max(1vh, 12px), 2vw) solid white;
+      object-fit: cover;
+      object: 0 5%;
+      float: right;
+    }
+    #info {
+      word-break: break-all;
+      overflow-y: scroll;
+      width: calc(100vw - (min(max(28vh, 12px), 46vw) + 10vw));
+      height: 100%;
+      float: left;
+      margin-left: 2vw;
+      vertical-align: middle;
+      align-self: center;
+      text-align: left;
+      /* margin-top: min(max(2vh, 18px), 2vw); */
+    }
+    #info a {
+      text-decoration: none;
+      text-align: left;
+      font-size: min(max(4vw, 18px), 3vh);
+      color: white;
+      font-weight: bold;
+    }
+    #aniTxt {
+      color: #222222;
+      text-align: left;
+      font-size: min(max(4vw, 18px), 3vh);
+    }
+    #charSqBtn {
+      height: 4vh;
+      color: #222222;
+      font-size: min(max(2vh, 18px), 3vw);
+      font-weight: bold;
+      width: 20vw;
+      max-width: 12vh;
+      border-radius: 2vh;
+      border: none;
+      background-color: #F0A500;
+      top: 2vh;
+    }
+    #qDiv {
+      min-height: 10vh;
+      max-height: 50vh;
+      width: 80vw;
+      margin-left: 10vw;
+      overflow-y: scroll;
+    }
+    #qut {
+      font-size: min(max(4vw, 18px), 3vh);
+    }
+    #qutName {
+      font-size: min(max(4vw, 18px), 3vh);
+      text-align: center;
+
+    }
+    .topnav {
+      background-color: #222222;
+      overflow: hidden;
+      width: 100vw;
+      height: 5vh;
+      z-index: 5;
+    }
+    #logo {
+      height: 5vh;
+      float: left;
+      margin-left: 3vw;
+
+
+    }
+    #menu {
+      float: right;
+      height: 4vh;
+      width: 3.5vh;
+      margin: 0.5vh;
+      margin-right: 1.5vh;
+    }
+    #panel {
+      width: 50vw;
+      height: 100vh;
+      z-index: 2;
+      background-color: rgba(255,255,255,0.2);
+      box-sizing: initial;
+      border-left: 1vw solid #F0A500;
+      padding: 1vw;
+      -webkit-backdrop-filter: blur(100px);
+      backdrop-filter: blur(100px);
+      position: absolute;
+      top: 0;
+      right: 0;
+      display: none;
+    }
+    #panel p {
+      text-align: left;
+    }
+    #linkCont {
+      margin-top: 10vh;
+    }
+    .links {
+      text-decoration: none;
+      opacity: 1;
+      display: block;
+      text-align: left;
+      height: 5vh;
+    }
+
+
+
+@keyframes lineLoad {
+      0% {
+        width: 2vw;
+      }
+      25% {
+        width: 20vw;
+      }
+      50% {
+        width: 7vw;
+      }
+      75% {
+        width: 25vw;
+      }
+      100% {
+        width: 2vw;
+      }
+    }
+
+
+  </style>
+
+</head>
+<body id="body" style="min-height: 100vh;">
+
+
+  <div class="topnav" id="myTopnav">
+    <a href="./index.html"><img src="./aniquote-logo.png" id="logo" alt=""></a><img src="https://img.icons8.com/ios-filled/50/ffffff/menu--v1.png" id="menu" alt="" onclick="menu()">
+  </a>
+</div>
+<div id="panel">
+  <div id="linkCont">
+
+    <a class="links" href="#">Home</a>
+
+    <a class="links" href="./quotes-by-anime.html">Quotes in Anime</a>
+
+  </div>
+  <hr style="height:1vw; margin-top:50vh; margin-bottom: 3vh; background-color: black; border:none;"><p>
+    APIs used <br /> <a href="https://github.com/AniList/ApiV2-GraphQL-Docs">AniList</a>   ||   <a href="https://katanime.vercel.app/developer-api">KatAnime</a>
+    <br /> <br /> <br />
+  </p>
+</div>
+<div id="loading">
+  <div id="loadCont">
+    <center>
+      <h1>loading...</h1><hr id="line">
+    </center>
+  </div>
+</div>
+<div id="turn">
+  <center>
+    <h1 style="font-size: 10vh; margin-top:35vh;">pls use portrait mode</h1>
+  </center>
+</div>
+
+<div id="container">
+
+  <div id="charDiv">
+    <div id="charImgDiv">
+      <img id="charImg" src="https://s4.anilist.co/file/anilistcdn/character/large/b14-9Kb1E5oel1ke.png"
+      alt="" style="" />
+    </div>
+    <div id="info">
+      <h4 id="aniTxt">うちはイタチ<br>Itachi Uchiha<br>Age: 17-21</h4><a id="aniName" href="">Naruto</a>
+
+    </div>
+  </div>
+  <input type="submit" name="charSq" id="charSqBtn" value="Random" onclick="quoteRnd()" /><br />
+  <br />
+  <br />
+  <div id="qDiv">
+    <h3 id="qut" style="text-align: justify;">"I'll admit that you're stronger than before. But because of that, you seem to have lost sight of what's truly important. Now listen carefully. The people of the village, who once abhorred you, have begun to admire you. They think of you as a comrade. It's because you fought hard for their acceptance. You once said it was everyone who cares about you who helped you get where you are now. If you forget others because you have power, and become arrogant and egotistical, you'll eventually become just like Madara. No matter how powerful you become, do not try to shoulder everything alone. Becoming the Hokage doesn't mean people will acknowledge you. But when the people acknowledge you, you can become Hokage. Never forget your friends!"
+
+    </h3><br />
+    <h3 id="qutName" style="">~ Itachi Uchiha ~</h3>
+
+    <br><br>
+  </div>
+</div>
+<hr style="position: absolute; bottom: 5vh; height:0.4vh; width: 100vw; border: none; background-color: #F0A500" /><br />
+<div style="height:5vh; width:100vw; position:absolute; bottom:0; padding-top: 1vh; z-index:5; background-color:#222222;">
+
+  <h7 style="margin: 1.5vh;">
+    utsavsssingh@gmail.com
+  </h7>
+</div>
+<script type="text/javascript" charset="utf-8">
+
+  /* Toggle between adding and removing the "responsive" class to topnav when the user clicks on the icon */
+  function myFunction() {
+    var x = document.getElementById("myTopnav");
+    if (x.className === "topnav") {
+      x.className += " responsive";
+    } else {
+      x.className = "topnav";
+    }
+  }
+  var load = document.getElementById('loading'); //AniList
+  var aniTxt = document.getElementById('aniTxt'); //AniList
+  var charImg = document.getElementById('charImg'); //AniList
+  var qut = document.getElementById('qut'); //KatApi
+  var qutName = document.getElementById('qutName'); //KatApi
+  var aniName = document.getElementById('aniName'); //KatApi
+  var rQuote;
+  var rInt = 0;
+  //+++++++++++++++++++AniList+++++++++++++++++++
+  function getRndInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+  function menu() {
+    if (document.getElementById("panel").style.display == "none") {
+      document.getElementById("panel").style.display = "initial"
+    } else {
+      document.getElementById("container").style.filter = "blur(0px)"
+
+      document.getElementById("panel").style.display = "none"
+    }
+  }
+
+  setInterval(screenCheck, 1000)
+  function screenCheck() {
+    if (screen.availHeight < screen.availWidth) {
+
+      document.getElementById("turn").style.display = "initial";
+      document.getElementsByClassName("topnav")[0].style.display = "none";
+
+    } else {
+
+      document.getElementById("turn").style.display = "none";
+      document.getElementsByClassName("topnav")[0].style.display = "block";
+
+    }
+  }
+
+
+  function quoteRnd() {
+    console.log("hit")
+    loading.style.display = "initial";
+    // charImg.style.display = "none";
+    rInt = getRndInt(0, 4);
+    //=====================KatApi======================
+    fetch("https://katanime.vercel.app/api/getrandom")
+    .then(response => response.json())
+    .then(getQuote);
+
+    function getQuote(data) {
+      var rQuote = data;
+      console.log(rQuote)
+
+
+      var query = `
+      query ($search: String) { # Define which variables will be used in the query (id)
+      Character (search: $search, sort: SEARCH_MATCH) { # Insert our variables into the query arguments (id) (type: ANIME is hard-coded in the query)
+      id
+      name {
+      first
+      last
+      full
+      native
+      }
+      age
+      image {
+      large
+      }
+      media(sort: ID, type: ANIME){
+
+      nodes{
+      siteUrl
+      title{english(stylised: true)}}
+      }
+      }
+      }
+      `;
+
+      // Define our query variables and values that will be used in the query request
+      var variables = {
+        search: rQuote.result[rInt].character
+      };
+
+      // Define the config we'll need for our Api request
+      var url = 'https://graphql.anilist.co',
+      options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          query: query,
+          variables: variables
+        })
+      };
+
+      // Make the HTTP Api request
+      fetch(url, options).then(handleResponse)
+      .then(handleData)
+      .catch(handleError);
+
+      function handleResponse(response) {
+        return response.json().then(function (json) {
+          return response.ok ? json: Promise.reject(json);
+        });
+      }
+
+      function handleData(data) {
+        char = data.data.Character;
+        charImg.src = char.image.large;
+        a = char.media.nodes[0].title.english[0]
+        b = rQuote.result[rInt].anime[0]
+        if (a == b) {
+
+          if (data.data.Character == null) {
+            quoteRnd()
+            console.log("chek krrrrrrrrrr")
+          } else {
+            console.log(data.data.Character);
+            if (char.age == null) {
+              aniTxt.innerHTML = char.name.native + "<br>" + char.name.full;
+            } else {
+              aniTxt.innerHTML = char.name.native + "<br>" + char.name.full + "<br> Age: " + char.age;
+            };
+            aniName.innerHTML = "Anime: " + rQuote.result[rInt].anime+" " + `<img src="https://img.icons8.com/material-outlined/20/ffffff/external-link.png"/>`;
+            aniName.href = char.media.nodes[0].siteUrl;
+            qut.innerHTML = `"${rQuote.result[rInt].english}"`
+            qutName.innerHTML = `~   ${char.name.full}   ~`;
+
+            charImg.style.display = "initial";
+            loading.style.display = "none";
+          }
+
+        } else {
+          quoteRnd()
+        }
+
+      }
+
+      function handleError(error) {
+        quoteRnd()
+        console.error(error);
+      }
+
+    }//f(getQuote)
+  }
+  quoteRnd()
+</script>
+</body>
+</html>
+</html>

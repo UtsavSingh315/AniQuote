@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta name="" content="">
+  <title>Search Anime</title>
+  <link rel="icon" href=
+  "./ttlimg.png"
+  type="image/x-icon">
+  <style media="screen">
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@1,700&family=Poppins&family=Raleway:wght@200&display=swap');
+    * {
+      padding: 0px;
+      margin: 0px;
+      position: relative;
+      z-index: 0;
+      font-family: Open Sans;
+      font-family: Poppins;
+      text-align: center;
+      align-items: center;
+      color: white;
+      align-self: center;
+      box-sizing: border-box;
+      font-size: 2vh;
+      scrollbar-width: none;
+
+    }
+    *:focus {
+      outline: none;
+    }
+    #body {
+      background-color: #222222;
+      z-index: 0;
+      width: 100%;
+      min-height: 100vh;
+    }
+
+    #loading {
+      transition-duration: 1s;
+      display: none;
+      position: absolute;
+      top: 3vh;
+      left: 7vw;
+      width: 86vw;
+      height: 86vh;
+      margin-top: 5vh;
+      border: solid 2vh #F0A500;
+      border-radius: 5vh;
+      z-index: 5;
+      background-color: #222222;
+    }
+    #turn {
+      transition-duration: 1s;
+      display: none;
+      position: absolute;
+      top: 3vh;
+      left: 7vw;
+      width: 86vw;
+      height: 86vh;
+      margin-top: 5vh;
+      border: solid 2vh #F0A500;
+      border-radius: 5vh;
+      z-index: 5;
+      background-color: #222222;
+    }
+    #loadCont {
+      width: 32vw;
+      margin: auto;
+      margin-top: 40vh;
+    }
+    #loadCont h1 {
+      /* vertical-align: middle;
+      position: absolute;
+      top: 50%; bottom: 50%;
+      left: auto; right: auto;*/
+
+      margin-bottom: auto;
+      text-align: left;
+      font-size: 8vw;
+    }
+    #line {
+      background-color: #F0A500;
+      width: 1vh;
+      height: 1vh;
+      border: none;
+      margin-top: -1vh;
+      margin-inline: 0.3vh;
+      animation: lineLoad;
+      animation-duration: 1.5s;
+      animation-delay: 0.07s;
+      animation-iteration-count: infinite;
+      border-radius: 0  0.5vh 0.5vh 0;
+    }
+    #container {
+      z-index: -1;
+      margin-bottom: 0;
+      height: inherit;
+    }
+    #container::-webkit-scrollbar {
+      display: none;
+    }
+    #container::scrollbar {
+      display: none;
+    }
+
+    #charDiv {
+      max-height: 30vh;
+      height: 50vw;
+      background-color: #fff;
+      box-sizing: initial;
+      padding: 0;
+      padding-top: min(max(1vh, 18px), 4vh);
+      padding-bottom: 1vw;
+      overflow-y: hidden;
+
+    }
+    #charDivImg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      z-index: -1;
+      filter: blur(4px) contrast(70%);
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position-x: center;
+    }
+    #aniImgDiv {
+
+      width: min(max(28vh, 12px), 46vw);
+      height: min(max(42vw, 12px), 28vh);
+      margin-left: 5vw;
+
+      float: left;
+
+    }
+    #aniImg {
+      height: 38vw;
+      width: 38vw;
+      max-height: 24vh;
+      max-width: 24vh;
+      box-sizing: initial;
+      border-radius: 50%;
+      border: min(max(1vh, 12px), 2vw) solid white;
+      object-fit: cover;
+      object: 0 5%;
+      float: right;
+    }
+    #info {
+      word-break: break-all;
+      overflow-y: hidden;
+      width: calc(100vw - (min(max(28vh, 12px), 46vw) + 10vw));
+      height: 100%;
+      float: left;
+      margin-left: 2vw;
+      vertical-align: middle;
+      align-self: center;
+      text-align: left;
+      /* margin-top: min(max(2vh, 18px), 2vw); */
+    }
+    #info a {
+      text-decoration: none;
+      text-align: justify;
+      font-size: min(max(4vw, 18px), 3vh);
+
+      font-weight: bold;
+    }
+    #aniTxt {
+
+      text-align: justify;
+      font-size: min(max(4vw, 18px), 3vh);
+    }
+    #chInDiv {
+      background-color: #222222;
+      padding: 0;
+
+      margin: auto;
+      align-self: center;
+      width: calc(50vw + 4vh);
+      max-width: calc(300px + 4vh);
+      box-sizing: initial;
+      border-radius: 4vh;
+      border: 0.5vh solid #F0A500;
+    }
+    #bar {
+      display: block;
+    }
+    #AniInput {
+      border: none;
+      background-color: rgba(255,255,255,0);
+      color: #fff;
+      width: 50vw;
+      max-width: 300px;
+      height: 4vh;
+    }
+    #charSqBtn {
+      height: 4vh;
+      width: 4vh;
+      color: #222222;
+      font-size: min(max(2vh, 18px), 3vw);
+      font-weight: bold;
+      border-radius: 2vh;
+      border: none;
+      background-color: #F0A500;
+      top: 0;
+    }
+
+    .pgBtn {
+
+      height: 4vh;
+      width: 4vh;
+      color: #222222;
+      font-size: min(max(2vh, 18px), 3vw);
+      font-weight: bold;
+      border-radius: 2vh;
+      border: none;
+      background-color: #F0A500;
+      top: 0;
+    }
+    #qDiv {
+      min-height: 10vh;
+      max-height: 50vh;
+      width: 80vw;
+      margin-left: 10vw;
+      overflow-y: scroll;
+      /*scroll-snap-type: mandatory;
+      scroll-snap-type: y proximity;*/
+
+      justify-content: center;
+      align-items: center;
+    }
+    #qDiv::scrollbar {
+      display: none;
+    }
+
+    .qDivChild {
+      scroll-snap-align: start;
+
+    }
+    .qut {
+      font-size: min(max(4vw, 18px), 3vh);
+    }
+    .qutName {
+      font-size: min(max(4vw, 18px), 3vh);
+      text-align: center;
+
+    }
+    .topnav {
+      background-color: #222222;
+      overflow: hidden;
+      width: 100vw;
+      height: 5vh;
+      z-index: 5;
+    }
+    #logo {
+      height: 5vh;
+      float: left;
+      margin-left: 3vw;
+
+
+    }
+    #menu {
+      float: right;
+      height: 4vh;
+      width: 3.5vh;
+      margin: 0.5vh;
+      margin-right: 1.5vh;
+    }
+    #panel {
+      width: 50vw;
+      height: 100vh;
+      z-index: 2;
+      background-color: rgba(255,255,255,0.2);
+      box-sizing: initial;
+      border-left: 1vw solid #F0A500;
+      padding: 1vw;
+      -webkit-backdrop-filter: blur(100px);
+      backdrop-filter: blur(100px);
+      position: absolute;
+      top: 0;
+      right: 0;
+      display: none;
+    }
+    #panel p {
+      text-align: left;
+    }
+    #linkCont {
+      margin-top: 10vh;
+    }
+    .links {
+      text-decoration: none;
+      opacity: 1;
+      display: block;
+      text-align: left;
+      height: 5vh;
+    }
+
+
+
+@keyframes lineLoad {
+      0% {
+        width: 2vw;
+      }
+      25% {
+        width: 20vw;
+      }
+      50% {
+        width: 7vw;
+      }
+      75% {
+        width: 25vw;
+      }
+      100% {
+        width: 2vw;
+      }
+    }
+@media only screen and (orientation:landscape) {
+      #turn {
+        display: initial;
+      }
+      #container {
+        display: none;
+      }
+      .topnav {
+        display: none;
+      }
+    }
+
+    /* (B) CORRECT ORIENTATION - SHOW CONTENT HIDE MESSAGE */
+@media only screen and (orientation:portrait) {
+      #turn {
+        display: none;
+      }
+      #container {
+        display: initial;
+      }
+      .topnav {
+        display: block;
+      }
+    }
+  </style>
+
+</head>
+<body id="body" style="">
+  <div id="turn" style="">
+    <h7 style="font-size: 7vh;">pls use portrait mode.</h7>
+  </div>
+
+  <div class="topnav" id="myTopnav">
+    <a href="./index.html"><img src="./aniquote-logo.png" id="logo" alt=""></a><img src="https://img.icons8.com/ios-filled/50/ffffff/menu--v1.png" id="menu" alt="" onclick="menu()">
+  </a>
+</div>
+<div id="panel" style="display: none;">
+  <div id="linkCont">
+
+    <a class="links" href="./index.html">Home</a>
+    <a class="links" href="#">Quotes in Anime</a>
+  </div>
+  <hr style="height:1vw; margin-top:50vh; margin-bottom: 3vh; background-color: black; border:none;"><p>
+    APIs used <br /> <a href="https://github.com/AniList/ApiV2-GraphQL-Docs">AniList</a> || <a href="https://katanime.vercel.app/developer-api">KatAnime</a>
+    <br /> <br /> <br />
+  </p>
+</div>
+<div id="loading">
+  <div id="loadCont">
+    <center>
+      <h1>loading...</h1><hr id="line">
+    </center>
+  </div>
+</div>
+<div id="turn">
+  <center>
+    <h1 style="font-size: 10vh; margin-top:35vh;">pls use portrait mode</h1>
+  </center>
+</div>
+<div id="container">
+
+  <div id="charDiv">
+    <div id="charDivImg" style="background-image:url('https://s4.anilist.co/file/anilistcdn/media/anime/banner/20-HHxhPj5JD13a.jpg');">
+
+    </div>
+    <div id="aniImgDiv">
+      <img id="aniImg" src="https://s4.anilist.co/file/anilistcdn/character/large/b14-9Kb1E5oel1ke.png"
+      alt="" style="" />
+    </div>
+    <div id="info">
+      <h4 id="aniTxt">うちはイタチ<br>Itachi Uchiha<br>Age: 17-21</h4><a id="aniName" href="">Naruto</a>
+
+    </div>
+  </div>
+  <br />
+  <div id="bar">
+    <button class="pgBtn" onclick="prev()" style="float: left; margin-left:10vw; margin-top: 0.5vh;"><img src="https://img.icons8.com/ios/50/ffffff/circled-chevron-left.png" style="height:100%; top:0;"></button>
+    <button class="pgBtn" onclick="next()" style="float: right; margin-right:10vw; margin-top: 0.5vh;"><img src="https://img.icons8.com/ios/50/ffffff/circled-chevron-right.png" style="height:100%; top:0;"></button>
+    <div id="chInDiv">
+      <input type="text" name="" id="AniInput" value="Naruto" style=""><button id="charSqBtn" onclick="aSearch()"><img src="https://img.icons8.com/ios-filled/50/ffffff/search--v1.png" style="height:50%; top:0.5vh;"></button>
+    </div>
+  </div>
+  <br />
+  <div id="qDiv">
+
+  </div>
+</div>
+<hr style="position: absolute; bottom: 5vh; height:0.4vh; width: 100vw; border: none; background-color: #F0A500" /><br />
+<div style="height:5vh; width:100vw; position:absolute; bottom:0; padding-top: 1vh; z-index:5; background-color:#222222;">
+
+  <h7 style="margin: 1.5vh;">
+    utsavsssingh@gmail.com
+  </h7>
+</div>
+<script type="text/javascript" charset="utf-8">
+  /* Toggle between adding and removing the "responsive" class to topnav when the user clicks on the icon */
+  function myFunction() {
+    var x = document.getElementById("myTopnav");
+    if (x.className === "topnav") {
+      x.className += " responsive";
+    } else {
+      x.className = "topnav";
+    }
+  }
+
+  var loading = document.getElementById('loading');
+  var aniTxt = document.getElementById('aniTxt'); //AniList
+  var aniImg = document.getElementById('aniImg'); //AniList
+  var charDivImg = document.getElementById('charDivImg'); //AniList
+  var qDiv = document.getElementById('qDiv');
+  var aniName = document.getElementById('aniName');
+  var AniInput = document.getElementById('AniInput').value.toLowerCase();
+  var rQuote;
+  var rInt = 0;
+  var page = 1;
+  var pgVal = true;
+  var realName;
+  var ani;
+  var quotekatApi;
+
+  //++++++++ +++++++++++AniList+++++++++++++++++++
+  function getRndInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+  function menu() {
+    if (document.getElementById("panel").style.display == "none") {
+      document.getElementById("panel").style.display = "initial"
+      document.getElementById("container").style.filter = "blur(5px)"
+
+    } else {
+      document.getElementById("container").style.filter = "blur(0px)"
+      document.getElementById("panel").style.display = "none"
+    }
+  }
+  setInterval(screenCheck, 1000)
+  function screenCheck() {
+    if (screen.availHeight < screen.availWidth) {
+
+      document.getElementById("turn").style.display = "initial";
+      document.getElementsByClassName("topnav")[0].style.display = "none";
+
+    } else {
+
+      document.getElementById("turn").style.display = "none";
+      document.getElementsByClassName("topnav")[0].style.display = "block";
+
+    }
+  }
+
+  function quote(give) {
+    // console.log("q1",page);
+    page = give;
+    // console.log("q2",page);
+    loading.style.display = "initial";
+    AniInput = document.getElementById('AniInput').value.toLowerCase();
+    //=====================AniList======================
+    var query = `
+    query ($search: String) { # Define which variables will be used in the query (id)
+
+    Media(search: $search, sort: SEARCH_MATCH, type: ANIME){
+
+
+    siteUrl
+    episodes
+    title{
+    english(stylised: false)
+    native(stylised: false)
+    }
+    startDate{
+    year
+    }
+    endDate{
+    year
+    }
+    coverImage{
+    large
+    }
+    bannerImage
+
+    }
+    }
+    `;
+
+    // Define our query variables and values that will be used in the query request
+    var variables = {
+      search: AniInput
+    };
+
+    // Define the config we'll need for our Api request
+    var url = 'https://graphql.anilist.co',
+    options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({
+        query: query,
+        variables: variables
+      })
+    };
+    // Make the HTTP Api request
+    fetch(url, options).then(handleResponse)
+    .then(handleData)
+    .catch(handleError);
+
+
+
+
+
+
+    function handleResponse(response) {
+      return response.json().then(function (json) {
+        return response.ok ? json: Promise.reject(json);
+      });
+    }
+
+    function handleData(data) {
+      ani = data.data.Media;
+      if (ani.title.english != null) {
+        realName = ani.title.english.toLowerCase();
+        console.log(realName.replace(/ /g, "%20").replace(/[+-.,'"_&#+/!?(;:)√{}=×•°]/g, ""))
+
+        katApi()
+        function katApi() {
+          fetch(`https://katanime.vercel.app/api/getbyanime?anime=${realName.replace(/ /g, "%20").replace(/[+-.,'"_&#+/!?(;:)√{}=×•°]/g, "")}&page=${page}`)
+          .then(response => response.json())
+          .then(check);
+        }
+        quotekatApi = katApi;
+
+
+
+
+        function check(quotes) {
+          var rInt = 1;
+          var rQuote = quotes;
+          var pgVal = rQuote.next;
+
+
+          if (quotes.sukses == true && quotes.result.length != 0) {
+            aniImg.src = ani.coverImage.large;
+            a = ani.title.english[0];
+            b = rQuote.result[rInt].anime[0];
+
+            function qLoop() {
+
+              qDiv.innerHTML = "";
+              for (rInt = 1; rInt < rQuote.result.length; rInt++) {
+                qDiv.innerHTML +=
+                `<div class="qDivChild" style=" "><div style="margin:auto; vertical-align: middle"><br><h3 class="qut" style="text-align: justify;">${rQuote.result[rInt].english}</h3><br /><h3 class="qutName" style="">~ ${rQuote.result[rInt].character} ~</h3><br><hr style="border-color: #F0A500;"><br></div></div>`
+              }
+            }
+            if (a == b) {
+
+              if (ani == null) {
+                console.log("chek krrrrrrrrrr")
+                document.getElementById('AniInput').value = "Naruto";
+                quote(1)
+              } else {
+                console.log(ani);
+                charDivImg.style.backgroundImage = `url("${ani.bannerImage}")`
+                aniTxt.innerHTML = ani.title.native + "<br>" + ani.title.english + "<br> Episodes : " + ani.episodes + `<br>${ani.startDate.year} - ${ani.endDate.year}`;
+
+                aniName.innerHTML = "AniList Link " + `<img src="https://img.icons8.com/material-outlined/20/ffffff/external-link.png"/>`;
+                aniName.href = ani.siteUrl;
+                qLoop()
+                loading.style.display = "none";
+              }
+
+            } else {
+              document.getElementById('AniInput').value = "Naruto";
+              quote(1)
+            }
+          } else if (quotes.next == false) {
+            alert("This is last page")
+            loading.style.display = "none";
+          } else {
+            alert(`
+              Error  :(
+
+              1. remove extra space or special characters
+              (if any) and try again...
+              2. or we don't have this anime yet.
+
+              `)
+            console.log(realName.replace(/ /g, "%20").replace(/[+-.,'"_&#+/!?(;:)√{}=×•°]/g, ""))
+            loading.style.display = "none";
+          }
+        }
+      } else {
+        alert(
+          `
+          No result Found.
+          Try checking spelling.
+          `)
+        loading.style.display = "none";
+
+      }
+
+
+
+    }
+
+    function handleError(error) {
+      console.error(error);
+      alert(`
+        Error  :(
+
+        1. remove extra space or special characters
+        (if any) and try again...
+        2. or we don't have this anime yet.
+
+        You are being redirected to Konohagakure
+        `)
+      document.getElementById('AniInput').value = "Naruto";
+      loading.style.display = "none";
+      quote(1)
+    }
+
+
+
+
+
+
+
+    //f(getQuote)
+  }// quote()
+  function next() {
+    if (pgVal == false) {
+      alert("This is last page");
+    } else if (pgVal == true) {
+      // console.log("nxt", page);
+      // var page = page + 1;
+      page += 1;
+      // console.log("nxt2", page);
+      quote(page)
+
+    }
+
+  }
+  function prev() {
+    if (page == 1) {
+      alert("This 1st page");
+    } else if (page > 1) {
+
+      // console.log(page);
+      // var page = page - 1;
+      page -= 1;
+      // console.log(page);
+      quote(page)
+
+    }
+
+  }
+  function aSearch() {
+    var page = 1;
+    quote(page)
+    var page = 1;
+  }
+  aSearch()
+</script>
+</body>
+</html>
+</html>
